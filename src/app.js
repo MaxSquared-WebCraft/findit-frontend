@@ -1,21 +1,22 @@
-import React, { Component } from 'react';
-import logo from './assets/logo.svg';
+import React from 'react';
 import './assets/app.css';
+import { Provider } from 'react-redux'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { initStore } from './store'
+import config from './lib/config'
+import { Reboot } from 'material-ui'
+import Routes from './routes'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
+const { env } = config
+
+const store = initStore(env)
+
+const App = () => [
+  <Reboot key='style-reset-component'/>,
+  <Provider key='general-app-component' store={store}>
+    <Router><Routes store={store}/></Router>
+  </Provider>
+]
+
 
 export default App;
