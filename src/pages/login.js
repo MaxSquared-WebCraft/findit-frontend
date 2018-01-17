@@ -2,16 +2,12 @@ import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { loginAction } from '../actions/auth'
-import { PATH_DASHBOARD } from '../routes'
 import {
   Button,
   Card,
   CardContent,
   CardHeader,
-  Checkbox,
   FormControl,
-  FormControlLabel,
-  FormGroup,
   Input,
   InputLabel,
 } from 'material-ui'
@@ -39,10 +35,6 @@ const StyledFormControl = styled(FormControl)`
 
 const StyledCardHeader = styled(CardHeader)`
   background-color: ${indigo[500]};
-`
-
-const StyledFormControlLabel = styled(FormControlLabel)`
-  margin-top: 10px;
 `
 
 const StyledButton = styled(Button)`
