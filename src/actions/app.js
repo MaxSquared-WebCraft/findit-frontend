@@ -2,11 +2,11 @@ import Immutable from 'seamless-immutable'
 
 export const SET_DRAWER_OPEN = "SET_DRAWER_OPEN"
 
-const initialState = Immutable({})
-
 export const toggleDrawerOpenStateAction = (open) => (dispatch) => {
   dispatch({ type: SET_DRAWER_OPEN, open })
 }
+
+const initialState = Immutable({})
 
 export const getInitialState = () => initialState
 
