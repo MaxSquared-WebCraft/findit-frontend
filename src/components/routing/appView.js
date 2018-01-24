@@ -101,6 +101,9 @@ const styles = theme => ({
     }),
     marginLeft: 0,
   },
+  list: {
+    padding: 0,
+  }
 })
 
 const LinkComponent = ({ path, ...rest }) => <Link to={path} {...rest}/>
@@ -184,8 +187,6 @@ class AppView extends PureComponent {
         breakPointHide,
       },
     } = this.props
-
-    console.log('classes', this.props.classes)
 
     return (
       <div className={root}>
