@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "FindIt App",
+  "name": "Find It front end application",
   "icons": [
     {
       "src": "favicon.ico",

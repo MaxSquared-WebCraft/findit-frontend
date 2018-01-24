@@ -13,6 +13,8 @@ import {
 } from 'material-ui'
 import { indigo } from 'material-ui/colors'
 import styled from 'styled-components'
+import { PATH_DASHBOARD } from '../routes'
+import { Redirect } from 'react-router-dom'
 
 const FlexContainer = styled.div`
   display: flex;
@@ -30,7 +32,7 @@ const StyledCard = styled(Card)`
 `
 
 const StyledFormControl = styled(FormControl)`
-  margin-top: 20px;
+  margin-bottom: 20px !important;
 `
 
 const StyledCardHeader = styled(CardHeader)`
@@ -38,7 +40,7 @@ const StyledCardHeader = styled(CardHeader)`
 `
 
 const StyledButton = styled(Button)`
-  margin-top: 50px;
+  margin-top: 15px;
   width: 100%;
 `
 
@@ -70,11 +72,11 @@ class LoginPage extends PureComponent {
 
   render() {
 
-    console.log('sers')
-
     const { username, password } = this.state
+    const { user } = this.props
 
-    return (
+    return user ?
+      <Redirect to={PATH_DASHBOARD}/> :
       <FlexContainer>
         <StyledCard raised>
           <form onSubmit={this.handleFormSubmit}>
@@ -103,7 +105,6 @@ class LoginPage extends PureComponent {
           </form>
         </StyledCard>
       </FlexContainer>
-    )
   }
 }
 

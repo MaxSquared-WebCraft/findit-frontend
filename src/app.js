@@ -6,10 +6,12 @@ import { initStore } from './store'
 import config from './lib/config'
 import { Reboot } from 'material-ui'
 import Routes from './routes'
+import BaseApi from './lib/api/finditApi'
 
-const { env } = config
+const { env, base } = config
 
 const store = initStore(env)
+BaseApi.initApi(base)
 
 const App = () => [
   <Reboot key='style-reset-component'/>,
@@ -17,6 +19,5 @@ const App = () => [
     <Router><Routes store={store}/></Router>
   </Provider>
 ]
-
 
 export default App;

@@ -14,32 +14,32 @@ const tryDecodeToken = () => {
   try {
     const token = localStorage.getItem('token')
     const user = jwtDecode(token)
-    const { exp, username, role } = user
-    if (exp < Date.now() / 1000) return null
+    const { uuid, role } = user
+    //if (exp < Date.now() / 1000) return null
     setToken(token)
-    return { username, role }
+    return { uuid, role }
   } catch(err) {
     localStorage.removeItem('token')
     return null
   }
 }
 
-export const loginAction = (username, password) => async (dispatch) => {
+export const loginAction = (email, password) => async (dispatch) => {
 
   const { token } = await runAsyncHelper({
-    todo: () => SoundBoardApi.login({ username, password }),
+    todo: () => SoundBoardApi.login({ email, password }),
     dispatch,
   })
 
   if (!token) throw new Error('No token returned by the server.')
 
-  const { username: decUsername, role } = jwtDecode(token)
+  const { username, role } = jwtDecode(token)
 
   setToken(token)
 
   dispatch({
     type: SET_USER,
-    user: { username: decUsername, role },
+    user: { username, role },
   })
 }
 

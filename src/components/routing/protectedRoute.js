@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Route, Redirect } from 'react-router-dom'
+import { PATH_LOGIN } from '../../routes'
+import AppView from './appView'
 
 const ProtectedRoute = ({ component: Comp, props: componentProps, ...rest }) => {
 
@@ -9,8 +11,8 @@ const ProtectedRoute = ({ component: Comp, props: componentProps, ...rest }) => 
     const { user } = componentProps || {}
 
     return user ?
-      <Comp {...props} {...componentProps} /> :
-      <Redirect to={`/login`}/>
+      <AppView><Comp {...props} {...componentProps} /></AppView> :
+      <Redirect to={PATH_LOGIN}/>
   }
 
   return (<Route {...rest} render={renderComponent}/>)
@@ -19,7 +21,6 @@ const ProtectedRoute = ({ component: Comp, props: componentProps, ...rest }) => 
 ProtectedRoute.propTypes = {
   props: PropTypes.any,
   component: PropTypes.any,
-  location: PropTypes.string,
 }
 
 export default ProtectedRoute
