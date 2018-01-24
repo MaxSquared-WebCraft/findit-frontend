@@ -4,14 +4,17 @@ import {
   Typography, withStyles,
 } from 'material-ui'
 import { Link } from 'react-router-dom'
-import { PATH_LOGOUT } from '../../routes'
+import { PATH_LOGOUT, PATH_DASHBOARD, PATH_FILES } from '../../routes'
 import MenuIcon from 'material-ui-icons/Menu'
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft'
-import InboxIcon from 'material-ui-icons/MoveToInbox'
+import CloudUploadIcon from 'material-ui-icons/CloudUpload'
+import CloudIcon from 'material-ui-icons/Cloud'
 import { bindActionCreators, compose } from 'redux'
 import { toggleDrawerOpenStateAction } from '../../actions/app'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
+import { applyPropsToComponent } from '../../lib/renderHelper'
+import { withRouter } from 'react-router'
 
 const drawerWidth = 240
 
@@ -60,7 +63,7 @@ const styles = theme => ({
   breakPointHide: {
     [theme.breakpoints.down('sm')]: {
       display: 'none',
-    }
+    },
   },
   drawerPaper: {
     position: 'relative',
@@ -100,7 +103,7 @@ const styles = theme => ({
   },
 })
 
-const LogoutLink = (props) => <Link to={PATH_LOGOUT} {...props}/>
+const LinkComponent = ({ path, ...rest }) => <Link to={path} {...rest}/>
 
 const mapStateToProps = ({ app: { drawerOpen } }) => ({ drawerOpen })
 
@@ -111,6 +114,11 @@ class AppView extends PureComponent {
   handleDrawerState = (open) => () => {
     const { toggleDrawerOpenStateAction } = this.props
     toggleDrawerOpenStateAction(open)
+  }
+
+  handleListClicked = (location) => () => {
+    const { history } = this.props
+    history.push(location)
   }
 
   renderDrawer = () => {
@@ -139,11 +147,17 @@ class AppView extends PureComponent {
             </IconButton>
           </div>
           <List className={list}>
-            <ListItem button>
+            <ListItem button onClick={this.handleListClicked(PATH_DASHBOARD)}>
               <ListItemIcon>
-                <InboxIcon/>
+                <CloudUploadIcon/>
               </ListItemIcon>
-              <ListItemText primary="Inbox"/>
+              <ListItemText primary="Upload"/>
+            </ListItem>
+            <ListItem button onClick={this.handleListClicked(PATH_FILES)}>
+              <ListItemIcon>
+                <CloudIcon/>
+              </ListItemIcon>
+              <ListItemText primary="My Files"/>
             </ListItem>
           </List>
         </div>
@@ -171,6 +185,8 @@ class AppView extends PureComponent {
       },
     } = this.props
 
+    console.log('classes', this.props.classes)
+
     return (
       <div className={root}>
         <div className={appFrame}>
@@ -192,7 +208,7 @@ class AppView extends PureComponent {
               <Button
                 className={classNames(drawerOpen && breakPointHide)}
                 color="inherit"
-                component={LogoutLink}
+                component={applyPropsToComponent({ path: PATH_LOGOUT })(LinkComponent)}
               >Logout
               </Button>
             </Toolbar>
@@ -208,4 +224,5 @@ class AppView extends PureComponent {
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles, { withTheme: true }),
+  withRouter,
 )(AppView)

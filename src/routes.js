@@ -7,10 +7,12 @@ import ProtectedRoute from './components/routing/protectedRoute';
 export const PATH_DASHBOARD = '/'
 export const PATH_LOGIN = '/login'
 export const PATH_LOGOUT = '/logout'
+export const PATH_FILES = '/files'
 
 const AsyncLogin = asyncComponent(() => import('./pages/login'))
 const AsyncLogout = asyncComponent(() => import('./pages/logout'))
 const AsyncDashboard = asyncComponent(() => import('./pages/dashboard'))
+const AsyncFiles = asyncComponent(() => import('./pages/files'))
 const AsyncNotFound = asyncComponent(() => import('./pages/404'))
 
 export default ({ store }) => {
@@ -30,6 +32,12 @@ export default ({ store }) => {
         path={PATH_DASHBOARD}
         exact
         component={AsyncDashboard}
+        props={props}
+      />
+      <ProtectedRoute
+        path={PATH_FILES}
+        exact
+        component={AsyncFiles}
         props={props}
       />
       <ProtectedRoute
