@@ -109,6 +109,6 @@ class Dashboard extends PureComponent {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withStyles(styles),
+  withStyles(styles, { withTheme: true }),
   withWidth(),
 )(Dashboard)
