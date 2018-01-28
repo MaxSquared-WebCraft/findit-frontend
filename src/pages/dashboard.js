@@ -2,7 +2,12 @@ import React, { PureComponent } from 'react'
 import DropzoneComponent from '../components/app/dropzone'
 import { Button, Grid, withStyles, withWidth } from 'material-ui'
 import { bindActionCreators, compose } from 'redux'
-import { addErrorFilesAction, addFilesAction, clearFilesAction } from '../actions/file'
+import {
+  addErrorFilesAction,
+  addFilesAction,
+  clearFilesAction,
+  uploadFilesAction
+} from '../actions/file'
 import { connect } from 'react-redux'
 import FileList from '../components/list/files'
 
@@ -21,14 +26,19 @@ const styles = (theme) => ({
   },
 })
 
-const mapStateToProps = ({ file: { files, errorFiles } }) => ({ files, errorFiles })
+const mapStateToProps = ({ file: { files, errorFiles } }) =>({ files, errorFiles })
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ addErrorFilesAction, addFilesAction, clearFilesAction }, dispatch)
+  bindActionCreators({
+    addErrorFilesAction,
+    addFilesAction,
+    clearFilesAction,
+    uploadFilesAction
+  }, dispatch)
 
 class Dashboard extends PureComponent {
 
-  handleUpload = (accepted, rejected) => {
+  handleDropzone = (accepted, rejected) => {
 
     const { addErrorFilesAction, addFilesAction } = this.props
     const { length: accLen } = accepted
@@ -43,6 +53,11 @@ class Dashboard extends PureComponent {
     clearFilesAction()
   }
 
+  handleUpload = () => {
+    const { uploadFilesAction, files } = this.props
+    uploadFilesAction(files)
+  }
+
   render() {
 
     const { classes, files, errorFiles } = this.props
@@ -51,8 +66,8 @@ class Dashboard extends PureComponent {
     return (
       <div>
         <DropzoneComponent
-          onUploadClicked={this.handleUpload}
-          onFileDropped={this.handleUpload}
+          onUploadClicked={this.handleDropzone}
+          onFileDropped={this.handleDropzone}
           className={classes.dropzone}
           acceptString={accept}
         />
@@ -60,10 +75,23 @@ class Dashboard extends PureComponent {
           <Grid item xs={12}>
             <Grid container spacing={24}>
               <Grid item xs={6} className={classes.center}>
-                <Button onClick={this.handleClearClicked} raised fullWidth color='secondary'>Clear</Button>
+                <Button
+                  onClick={this.handleClearClicked}
+                  raised
+                  fullWidth
+                  color='secondary'
+                >Clear
+                </Button>
               </Grid>
               <Grid item xs={6} className={classes.center}>
-                <Button disabled={!length} raised fullWidth color='primary'>Upload</Button>
+                <Button
+                  onClick={this.handleUpload}
+                  disabled={!length}
+                  raised
+                  fullWidth
+                  color='primary'
+                >Upload
+                </Button>
               </Grid>
             </Grid>
           </Grid>

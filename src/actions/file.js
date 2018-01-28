@@ -1,4 +1,6 @@
 import Immutable from 'seamless-immutable'
+import FinditApi from '../lib/api/finditApi'
+import { runAsyncHelper } from '../lib/async'
 
 export const ADD_DROPPED_FILES = "ADD_DROPPED_FILES"
 export const ADD_ERROR_FILES = "ADD_ERROR_FILES"
@@ -22,6 +24,23 @@ export const clearFilesAction = () => (dispatch) => {
   dispatch({
     type: CLEAR_FILES,
   })
+}
+
+export const uploadFilesAction = (files) => async (dispatch) => {
+
+  files = Array.isArray(files) ? files : [files]
+
+  const todo = files.map((file) => {
+    const form = new FormData()
+    form.append('document', file)
+    return FinditApi.upload(form)
+  })
+
+  const res = await runAsyncHelper({ todo })
+
+  console.log('res', res)
+
+  dispatch(clearFilesAction())
 }
 
 const initialState = Immutable({ files: [], errorFiles: [] })

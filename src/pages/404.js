@@ -30,7 +30,7 @@ export default () => (
     <StyledCard raised>
       <StyledCardContent>
         <NotFound type='display3'>404</NotFound>
-        <Typography type='subheading'>Seite konnte nicht gefunden werden</Typography>
+        <Typography type='subheading'>Page cold not be found</Typography>
       </StyledCardContent>
     </StyledCard>
   </FlexContainer>

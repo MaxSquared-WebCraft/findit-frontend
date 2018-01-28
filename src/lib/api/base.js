@@ -12,12 +12,17 @@ export default class BaseApi {
   _baseRequest = async ({ method, endpoint, data, headers }) => {
     try {
 
+      const addHeaders = {}
+
+      if (this.token)
+        addHeaders['Authorization'] = this.token
+
       const { data: res } = await axios({
         url: this.base + endpoint,
         method,
         data,
         headers: {
-          'Authorization': this.token,
+          ...addHeaders,
           ...headers,
         },
       })
@@ -43,9 +48,7 @@ export default class BaseApi {
   }
 
 
-  _apiRequest = (method, endpoint, data) => {
-    let token = localStorage.getItem('token')
-    const headers = { 'Authorization': token }
+  _apiRequest = (method, endpoint, data, headers = {}) => {
     return this._baseRequest({ method, endpoint, data, headers })
   }
 
@@ -64,8 +67,8 @@ export default class BaseApi {
     this._apiRequest('get', endpoint, data)
   )
 
-  _post = (endpoint, data) => (
-    this._apiRequest('post', endpoint, data)
+  _post = (endpoint, data, headers) => (
+    this._apiRequest('post', endpoint, data, headers)
   )
 
   _put = (endpoint, data) => (
