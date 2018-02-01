@@ -33,13 +33,13 @@ export const loginAction = (email, password) => async (dispatch) => {
 
   if (!token) throw new Error('No token returned by the server.')
 
-  const { username, role } = jwtDecode(token)
+  const { role, uuid } = jwtDecode(token)
 
   setToken(token)
 
   dispatch({
     type: SET_USER,
-    user: { username, role },
+    user: { role, uuid },
   })
 }
 

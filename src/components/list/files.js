@@ -14,12 +14,12 @@ const FileList = (props) => {
       <Typography key='1' type='headline'>{title}</Typography> : null
       }
       <List key='2'>
-        {files.map(({ name }, idx) => (
+        {files.map(({ name, location, originalName }, idx) => (
           <ListItem key={name + idx}>
             <Avatar>
               <DriveFileIcon/>
             </Avatar>
-            <ListItemText primary={name}/>
+            <ListItemText primary={originalName || name} secondary={location || null}/>
           </ListItem>
         ))}
       </List>

@@ -10,7 +10,7 @@ const development = {
 }
 
 const local = {
-  base: 'http://192.168.1.3:8080/'
+  base: 'http://192.168.99.100:8080/'
 }
 
 const appEnvs = { production, development, local }

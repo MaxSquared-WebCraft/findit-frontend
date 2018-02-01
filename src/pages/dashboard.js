@@ -4,7 +4,7 @@ import { Button, Grid, withStyles, withWidth } from 'material-ui'
 import { bindActionCreators, compose } from 'redux'
 import {
   addErrorFilesAction,
-  addFilesAction,
+  addPreviewFilesAction,
   clearFilesAction,
   uploadFilesAction
 } from '../actions/file'
@@ -26,12 +26,12 @@ const styles = (theme) => ({
   },
 })
 
-const mapStateToProps = ({ file: { files, errorFiles } }) =>({ files, errorFiles })
+const mapStateToProps = ({ file: { previewFiles, errorFiles } }) => ({ previewFiles, errorFiles })
 
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators({
     addErrorFilesAction,
-    addFilesAction,
+    addPreviewFilesAction,
     clearFilesAction,
     uploadFilesAction
   }, dispatch)
@@ -40,11 +40,11 @@ class Dashboard extends PureComponent {
 
   handleDropzone = (accepted, rejected) => {
 
-    const { addErrorFilesAction, addFilesAction } = this.props
+    const { addErrorFilesAction, addPreviewFilesAction } = this.props
     const { length: accLen } = accepted
     const { length: rejLen } = rejected
 
-    if (accLen) addFilesAction(accepted)
+    if (accLen) addPreviewFilesAction(accepted)
     if (rejLen) addErrorFilesAction(rejected)
   }
 
@@ -54,14 +54,14 @@ class Dashboard extends PureComponent {
   }
 
   handleUpload = () => {
-    const { uploadFilesAction, files } = this.props
-    uploadFilesAction(files)
+    const { uploadFilesAction, previewFiles } = this.props
+    uploadFilesAction(previewFiles)
   }
 
   render() {
 
-    const { classes, files, errorFiles } = this.props
-    const { length } = files
+    const { classes, previewFiles, errorFiles } = this.props
+    const { length } = previewFiles
 
     return (
       <div>
@@ -96,7 +96,7 @@ class Dashboard extends PureComponent {
             </Grid>
           </Grid>
           <Grid item xs={6}>
-            <FileList files={files} title={'Files:'}/>
+            <FileList files={previewFiles} title={'Files:'}/>
           </Grid>
           <Grid item xs={6}>
             <FileList files={errorFiles} title={'Forbidden files:'}/>

@@ -10,4 +10,8 @@ export default new class FinditApi extends BaseApi {
     return this._post('file', formData)
   }
 
+  getFiles = (userId) => {
+    return this._get(`file/${userId}`)
+  }
+
 }()

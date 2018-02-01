@@ -5,8 +5,9 @@ import { runAsyncHelper } from '../lib/async'
 export const ADD_DROPPED_FILES = "ADD_DROPPED_FILES"
 export const ADD_ERROR_FILES = "ADD_ERROR_FILES"
 export const CLEAR_FILES = "CLEAR_FILES"
+export const SET_FILES = "SET_FILES"
 
-export const addFilesAction = (files) => (dispatch) => {
+export const addPreviewFilesAction = (files) => (dispatch) => {
   dispatch({
     type: ADD_DROPPED_FILES,
     files,
@@ -26,6 +27,13 @@ export const clearFilesAction = () => (dispatch) => {
   })
 }
 
+export const setFilesAction = (files) => (dispatch) => {
+  dispatch({
+    type: SET_FILES,
+    files,
+  })
+}
+
 export const uploadFilesAction = (files) => async (dispatch) => {
 
   files = Array.isArray(files) ? files : [files]
@@ -36,14 +44,18 @@ export const uploadFilesAction = (files) => async (dispatch) => {
     return FinditApi.upload(form)
   })
 
-  const res = await runAsyncHelper({ todo })
-
-  console.log('res', res)
+  await runAsyncHelper({ todo })
 
   dispatch(clearFilesAction())
 }
 
-const initialState = Immutable({ files: [], errorFiles: [] })
+export const getAllFilesAction = (userId) => async (dispatch) => {
+  let files = await runAsyncHelper({ todo: () => FinditApi.getFiles(userId)})
+  files = files.map(({ uuid, location, originalName }) => ({ name: uuid, location, originalName }))
+  dispatch(setFilesAction(files))
+}
+
+const initialState = Immutable({ previewFiles: [], errorFiles: [], files: [] })
 
 export const getInitialState = () => initialState
 
@@ -54,9 +66,9 @@ export const reducer = (state = initialState, action) => {
   switch (type) {
 
     case ADD_DROPPED_FILES: {
-      const { files: newFiles } = action
-      const { files } = state
-      return state.set('files', files.concat(newFiles))
+      const { files } = action
+      const { previewFiles } = state
+      return state.set('previewFiles', previewFiles.concat(files))
     }
 
     case ADD_ERROR_FILES: {
@@ -68,7 +80,12 @@ export const reducer = (state = initialState, action) => {
     case CLEAR_FILES: {
       return state
         .set('errorFiles', [])
-        .set('files', [])
+        .set('previewFiles', [])
+    }
+
+    case SET_FILES: {
+      const { files } = action
+      return state.set('files', files)
     }
 
     default:

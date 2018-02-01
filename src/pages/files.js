@@ -1,19 +1,16 @@
 import React, { PureComponent } from 'react'
 import {
-  Avatar,
   FormControl,
-  Grid, IconButton,
+  Grid,
   Input,
   InputAdornment,
-  List,
-  ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText,
-  Typography,
   withStyles,
 } from 'material-ui'
-import { compose } from 'redux'
+import { bindActionCreators, compose } from 'redux'
 import SearchIcon from 'material-ui-icons/Search'
-import DriveFileIcon from 'material-ui-icons/InsertDriveFile'
-import DeleteIcon from 'material-ui-icons/Delete'
+import { getAllFilesAction } from '../actions/file'
+import { connect } from 'react-redux'
+import FileList from '../components/list/files'
 
 const styles = (theme) => ({
   icon: {
@@ -30,18 +27,23 @@ const SearchIconComponent = ({ classes }) => (
   </InputAdornment>
 )
 
-const generate = (element) => {
-  return [0, 1, 2, 4, 5].map(value =>
-    React.cloneElement(element, {
-      key: value,
-    }),
-  );
-}
+const mapStateToProps = ({ auth: { user }, file: { files } }) => ({ user, files })
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({ getAllFilesAction }, dispatch)
 
 class FilesComponent extends PureComponent {
 
   state = {
     search: '',
+  }
+
+  componentDidMount() {
+    this.getAllFiles()
+  }
+
+  getAllFiles = () => {
+    const { getAllFilesAction, user: { uuid } } = this.props
+    getAllFilesAction(uuid)
   }
 
   handleFormSubmit = (e) => {
@@ -52,10 +54,9 @@ class FilesComponent extends PureComponent {
     this.setState(() => ({ [field]: value }))
   }
 
-
   render() {
 
-    const { classes } = this.props
+    const { classes, files } = this.props
     const { search } = this.state
 
     return (
@@ -75,30 +76,8 @@ class FilesComponent extends PureComponent {
           </form>
         </Grid>
         <Grid item xs={12}>
-          <Typography type="title">
-            Your Files:
-          </Typography>
           <div>
-            <List>
-              {generate(
-                <ListItem button>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <DriveFileIcon/>
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary="Single-line item"
-                    secondary={'Tag1, Tag2, Tag3'}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton aria-label="Delete">
-                      <DeleteIcon/>
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>,
-              )}
-            </List>
+            <FileList files={files} title={'Your files'}/>
           </div>
         </Grid>
       </Grid>
@@ -107,5 +86,6 @@ class FilesComponent extends PureComponent {
 }
 
 export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles, { withTheme: true }),
 )(FilesComponent)
