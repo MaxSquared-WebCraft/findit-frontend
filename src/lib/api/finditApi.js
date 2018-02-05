@@ -14,4 +14,8 @@ export default new class FinditApi extends BaseApi {
     return this._get(`file/${userId}`)
   }
 
+  findFiles = (search) => {
+    return this._get(`search?text=${search}`)
+  }
+
 }()

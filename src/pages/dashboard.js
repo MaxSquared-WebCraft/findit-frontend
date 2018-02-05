@@ -11,7 +11,7 @@ import {
 import { connect } from 'react-redux'
 import FileList from '../components/list/files'
 
-const accept = 'image/*'
+const accept = 'image/*,application/pdf'
 
 const styles = (theme) => ({
   dropzone: {

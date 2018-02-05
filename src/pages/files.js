@@ -8,7 +8,7 @@ import {
 } from 'material-ui'
 import { bindActionCreators, compose } from 'redux'
 import SearchIcon from 'material-ui-icons/Search'
-import { getAllFilesAction } from '../actions/file'
+import { getAllFilesAction, findFilesAction } from '../actions/file'
 import { connect } from 'react-redux'
 import FileList from '../components/list/files'
 
@@ -29,7 +29,7 @@ const SearchIconComponent = ({ classes }) => (
 
 const mapStateToProps = ({ auth: { user }, file: { files } }) => ({ user, files })
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ getAllFilesAction }, dispatch)
+const mapDispatchToProps = (dispatch) => bindActionCreators({ getAllFilesAction, findFilesAction }, dispatch)
 
 class FilesComponent extends PureComponent {
 
@@ -48,6 +48,10 @@ class FilesComponent extends PureComponent {
 
   handleFormSubmit = (e) => {
     e.preventDefault()
+    const { findFilesAction, user: { uuid } } = this.props
+    const { search } = this.state
+    console.log('search', search)
+    findFilesAction(search, uuid)
   }
 
   handleChange = (field) => ({ target: { value }}) => {
